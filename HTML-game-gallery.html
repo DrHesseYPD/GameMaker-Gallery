@@ -25,7 +25,6 @@
       font-size: 2.2rem;
       margin-bottom: 30px;
       font-weight: 600;
-      color: #222;
     }
 
     .grid {
@@ -47,9 +46,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      cursor: pointer;
+    }
+    .card.no-link {
+      cursor: default;
+      opacity: 0.6;
     }
 
-    .card:hover {
+    .card:hover:not(.no-link) {
       transform: translateY(-6px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
@@ -66,6 +70,13 @@
       font-size: 32px;
     }
 
+    .warning {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #c0392b;
+      font-weight: bold;
+    }
+
     .card-title {
       font-size: 1.15rem;
       font-weight: 600;
@@ -76,41 +87,37 @@
 
 <body>
 
-  <h1>YPD GameMaker Gallery</h1>
+  <h1>My Websites</h1>
 
   <div class="grid" id="site-grid"></div>
 
+  <!-- Load external SITES array -->
+  <script src="sites.js"></script>
+
   <script>
-    // ⭐ EDIT THIS ARRAY TO MANAGE YOUR SITES
-    const sites = [
-      {
-        url: "https://drhesseypd.github.io/TestGameMakerSite/",
-        text: "Test GameMaker HTML Game",
-        color: "#4a6cf7",
-        icon: "fa-solid fa-football"
-      },
-      {
-        url: "https://drhesseypd.github.io/RPG-test/",
-        text: "Test GameMaker HTML - movement",
-        color: "#e67e22",
-        icon: "fa-solid fa-gamepad"
-      },
+    const defaultColor = "#888";
+    const defaultIcon  = "fa-solid fa-folder";
 
-    ];
-
-    // ⭐ JS LOOP TO GENERATE CARDS
     const grid = document.getElementById("site-grid");
 
-    sites.forEach(site => {
-      const card = document.createElement("a");
+    (window.SITES || []).forEach(site => {
+      const url   = site.url?.trim();
+      const text  = site.text ?? "Untitled Site";
+      const color = site.color ?? defaultColor;
+      const icon  = site.icon ?? defaultIcon;
+
+      const card = document.createElement(url ? "a" : "div");
+
       card.className = "card";
-      card.href = site.url;
+      if (!url) card.classList.add("no-link");
+      else card.href = url;
 
       card.innerHTML = `
-        <div class="icon-circle" style="background:${site.color}">
-          <i class="${site.icon}"></i>
+        <div class="icon-circle" style="background:${color}">
+          <i class="${icon}"></i>
         </div>
-        <div class="card-title">${site.text}</div>
+        <div class="card-title">${text}</div>
+        ${!url ? `<div class="warning">⚠ No URL Provided</div>` : ""}
       `;
 
       grid.appendChild(card);
