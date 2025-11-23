@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Websites</title>
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      font-weight: 600;
+      color: #222;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 25px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      padding: 25px 15px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .icon-circle {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      color: white;
+      font-size: 32px;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>YPD GameMaker Gallery</h1>
+
+  <div class="grid" id="site-grid"></div>
+
+  <script>
+    // ⭐ EDIT THIS ARRAY TO MANAGE YOUR SITES
+    const sites = [
+      {
+        url: "https://drhesseypd.github.io/TestGameMakerSite/",
+        text: "Test GameMaker HTML Game",
+        color: "#4a6cf7",
+        icon: "fa-solid fa-football"
+      },
+      {
+        url: "https://drhesseypd.github.io/RPG-test/",
+        text: "Test GameMaker HTML - movement",
+        color: "#e67e22",
+        icon: "fa-solid fa-gamepad"
+      },
+
+    ];
+
+    // ⭐ JS LOOP TO GENERATE CARDS
+    const grid = document.getElementById("site-grid");
+
+    sites.forEach(site => {
+      const card = document.createElement("a");
+      card.className = "card";
+      card.href = site.url;
+
+      card.innerHTML = `
+        <div class="icon-circle" style="background:${site.color}">
+          <i class="${site.icon}"></i>
+        </div>
+        <div class="card-title">${site.text}</div>
+      `;
+
+      grid.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>
