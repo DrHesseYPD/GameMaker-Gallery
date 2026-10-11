@@ -144,7 +144,17 @@
         window.SITES.forEach(site => {
           const card = document.createElement("a");
           card.className = "tile-card";
-          card.href = site.path || "#";
+
+          // Use url if provided, fallback to path
+          const targetUrl = site.url || site.path || "#";
+          card.href = targetUrl;
+
+          // Open external links in a new tab
+          if (site.url) {
+            card.target = "_blank";
+            card.rel = "noopener noreferrer";
+          }
+
           card.style.backgroundColor = site.colour || "#333333";
 
           const iconContainer = document.createElement("div");

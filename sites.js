@@ -1,5 +1,11 @@
 window.SITES = [
   {
+    url: "https://drhesseypd.github.io/Example-Game-for-Y9/",
+    text: "Example Game",
+    colour: "#9B59B6", // Distinctive Amethyst Purple
+    icon: "./assets/example_game_thumb.png"
+  },
+  {
     subfolder: "SM",
     path: "./SM/index.html",
     text: "SM",
