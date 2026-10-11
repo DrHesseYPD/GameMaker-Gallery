@@ -1,126 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Websites</title>
-
-  <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Launchpad</title>
   <style>
-    body {
+    * {
+      box-sizing: border-box;
       margin: 0;
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      background: #f5f7fa;
-      color: #333;
-      text-align: center;
-      padding: 40px 20px;
+      padding: 0;
     }
 
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 30px;
-      font-weight: 600;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 25px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .card {
-      background: white;
-      padding: 25px 15px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: transform 0.2s, box-shadow 0.2s;
-      text-decoration: none;
-      color: inherit;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #121214;
+      color: #ffffff;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .tile-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #ffffff;
+      padding: 1.5rem 1rem;
+      border-radius: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: pointer;
-    }
-    .card.no-link {
-      cursor: default;
-      opacity: 0.6;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .card:hover:not(.no-link) {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    .tile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
     }
 
-    .icon-circle {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
+    .tile-icon-container {
+      width: 96px;
+      height: 96px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 15px;
-      color: white;
-      font-size: 32px;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.15);
     }
 
-    .warning {
-      margin-top: 8px;
-      font-size: 0.85rem;
-      color: #c0392b;
-      font-weight: bold;
+    .tile-icon-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .card-title {
-      font-size: 1.15rem;
+    .tile-label {
       font-weight: 600;
-      margin-top: 5px;
+      font-size: 1.1rem;
+      text-align: center;
+      word-break: break-word;
     }
   </style>
+  <script src="sites.js"></script>
 </head>
-
 <body>
 
-  <h1>My Websites</h1>
+  <header>
+    <h1>HTML5 Game Launchpad</h1>
+  </header>
 
-  <div class="grid" id="site-grid"></div>
-
-  <!-- Load external SITES array -->
-  <script src="sites.js"></script>
+  <main class="gallery-grid" id="gallery"></main>
 
   <script>
-    const defaultColor = "#888";
-    const defaultIcon  = "fa-solid fa-folder";
+    document.addEventListener("DOMContentLoaded", () => {
+      const gallery = document.getElementById("gallery");
 
-    const grid = document.getElementById("site-grid");
+      // Default SVG placeholder fallback formatted as Data URI
+      const defaultIcon = "data:image/svg+xml;utf8," + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="6" width="20" height="12" rx="2"/>
+          <path d="M6 12h4m-2-2v4"/>
+          <circle cx="15" cy="11" r="1" fill="white"/>
+          <circle cx="18" cy="13" r="1" fill="white"/>
+        </svg>
+      `);
 
-    (window.SITES || []).forEach(site => {
-      const url   = site.url?.trim();
-      const text  = site.text ?? "Untitled Site";
-      const color = site.color ?? defaultColor;
-      const icon  = site.icon ?? defaultIcon;
+      if (window.SITES && Array.isArray(window.SITES)) {
+        window.SITES.forEach(site => {
+          const card = document.createElement("a");
+          card.className = "tile-card";
+          card.href = site.path || "#";
+          card.style.backgroundColor = site.colour || "#333333";
 
-      const card = document.createElement(url ? "a" : "div");
+          const iconContainer = document.createElement("div");
+          iconContainer.className = "tile-icon-container";
 
-      card.className = "card";
-      if (!url) card.classList.add("no-link");
-      else card.href = url;
+          const img = document.createElement("img");
+          img.src = site.icon;
+          img.alt = `${site.text} Thumbnail`;
+          img.onerror = function() {
+            this.onerror = null;
+            this.src = defaultIcon;
+          };
 
-      card.innerHTML = `
-        <div class="icon-circle" style="background:${color}">
-          <i class="${icon}"></i>
-        </div>
-        <div class="card-title">${text}</div>
-        ${!url ? `<div class="warning">⚠ No URL Provided</div>` : ""}
-      `;
+          iconContainer.appendChild(img);
 
-      grid.appendChild(card);
+          const label = document.createElement("span");
+          label.className = "tile-label";
+          label.textContent = site.text;
+
+          card.appendChild(iconContainer);
+          card.appendChild(label);
+          gallery.appendChild(card);
+        });
+      }
     });
   </script>
 
